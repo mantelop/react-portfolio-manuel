@@ -1,10 +1,30 @@
 import React, { useState } from "react";
 import AnchorLink from "react-anchor-link-smooth-scroll";
+import firebase from 'firebase/compat/app'; // Importar solo el módulo 'app'
+import 'firebase/compat/auth'; // Importar el módulo 'auth' si necesitas autenticación
+import LoginForm from './LoginForm';
 import "../styles.css";
 
 function Navbar() {
   const [durum, setDurum] = useState(true);
   console.log(durum);
+
+  const handleFirebaseLogin = () => {
+    const authProvider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().signInWithPopup(authProvider)
+      .then((result) => {
+        // El usuario ha iniciado sesión exitosamente con Firebase
+        const user = result.user;
+        // Realiza acciones adicionales si es necesario
+      })
+      .catch((error) => {
+        // Ocurrió un error durante el inicio de sesión con Firebase
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // Maneja el error de inicio de sesión con Firebase
+      });
+      ReactDOM.render(<LoginForm />, document.getElementById('login-form'));
+  };
 
   window.onscroll = function () {
     scrollFunction();
@@ -61,8 +81,8 @@ function Navbar() {
             </a>
           </div>
           <div className="btn">
-            <button className="border-[1px] border-white border-solid py-2 px-4 hover:bg-white hover:text-black font-bold">
-              Contactame!!!
+            <button className="border-[1px] border-white border-solid py-2 px-4 hover:bg-white hover:text-black font-bold" onClick={handleFirebaseLogin}>
+              Firebase
             </button>
           </div>
         </nav>
